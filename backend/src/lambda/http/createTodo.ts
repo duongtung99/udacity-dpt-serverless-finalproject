@@ -11,6 +11,16 @@ const logger = createLogger('CreateTodo-Http')
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info('Start process CreateTodo Event', { event })
   const newTodo: CreateTodoRequest = JSON.parse(event.body)
+  if(newTodo.name === ''){
+    return {
+      statusCode: 403,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
+      body:''
+    }
+  }
   const userId = getUserId(event)
   const newItem = await createTodo(userId, newTodo)
   logger.info('End process CreateTodo Event', { event })
